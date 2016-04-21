@@ -1,0 +1,6 @@
+#!/bin/bash
+
+branch=$(git current)
+git delete-pub "$branch"
+git checkout master
+git pull && git branch -d "$branch" && git pub "$branch"
