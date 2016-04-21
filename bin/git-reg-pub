@@ -1,0 +1,39 @@
+#!/bin/bash
+
+git_reg_pub_main(){
+	local remote_name
+	local remote
+	local host
+	local host_user
+	local user_name
+	local url
+
+	remote=$(git remote -v | grep $remote_name.*fetch)
+	remote=${remote#*	}
+	remote=${remote%.git *}
+
+	case "$remote" in
+		*git://github.com* | *@github* | *https://github.com*)
+			host=github
+			;;
+		*@bitbucket*)
+			host=bitbucket
+			;;
+		*)
+			echo "git-post: unknown hosting service. noop"
+			exit 1
+			;;
+	esac
+
+	for host_user in "$@"; do
+		if [ "${host_user%:*}" = $host ]; then
+			user_name=${host_user#*:}
+		fi
+	done
+
+	url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/")
+
+	git remote add pub $url
+}
+
+git_reg_pub_main "$@"
