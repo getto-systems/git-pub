@@ -1,3 +1,3 @@
 #!/bin/bash
 
-git push pub "$(git current)"
+git push pub "$(git symbolic-ref --short HEAD)" "$@"
