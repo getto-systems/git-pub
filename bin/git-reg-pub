@@ -14,10 +14,10 @@ git_reg_pub_main(){
 	remote=${remote%.git}
 
 	case "$remote" in
-		*git://github.com* | *@github* | *https://github.com*)
+		git://github.com*)
 			host=github
 			;;
-		*@bitbucket*)
+		https://*bitbucket*)
 			host=bitbucket
 			;;
 		*)
@@ -37,7 +37,12 @@ git_reg_pub_main(){
 		exit 1
 	fi
 
-	url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/" | sed "s/^git:/https:/")
+	url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/")
+
+	if [ $host = "github" ]; then
+		remote=${remote#git:}
+		remote=https:$remote
+	fi
 
 	git remote add pub $url
 }
