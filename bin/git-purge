@@ -3,4 +3,4 @@
 branch=$(git symbolic-ref --short HEAD)
 git delete-pub "$branch"
 git checkout master
-git pull && git branch -d "$branch" && git pub "$branch"
+git pull && git branch -d "$branch" && git pub
