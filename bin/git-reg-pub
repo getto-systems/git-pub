@@ -39,10 +39,23 @@ git_reg_pub_main(){
 
 	url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/")
 
-	if [ $host = "github" ]; then
-		url=${url#git://}
-		url=https://$user_name@$url
-	fi
+	case "$host" in
+		github)
+			url=${url#git://}
+			url=${url#https://}
+			url=https://$user_name@$url
+			;;
+		bitbucket)
+			case "$url" in
+				*@*)
+					;;
+				*)
+					url=${url#https://}
+					url=https://$user_name@$url
+					;;
+			esac
+			;;
+	esac
 
 	git remote add pub $url
 }
