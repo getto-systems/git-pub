@@ -21,7 +21,7 @@ git_reg_pub_main(){
 			host=bitbucket
 			;;
 		*)
-			echo "git-post: unknown hosting service. noop"
+			echo "git-reg-pub: unknown hosting service. noop"
 			exit 1
 			;;
 	esac
