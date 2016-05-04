@@ -14,10 +14,10 @@ git_reg_pub_main(){
 	remote=${remote%.git}
 
 	case "$remote" in
-		git://github.com*)
+		git://github.com* | https://github.com*)
 			host=github
 			;;
-		https://*bitbucket*)
+		https://*bitbucket.org* | git@bitbucket.org:*)
 			host=bitbucket
 			;;
 		*)
@@ -47,11 +47,14 @@ git_reg_pub_main(){
 			;;
 		bitbucket)
 			case "$url" in
-				*@*)
-					;;
-				*)
+				https://*)
 					url=${url#https://}
 					url=https://$user_name@$url
+					;;
+				*)
+					url=${url#git@bitbucket.org:}
+					url=${url#*/}
+					url=git@bitbucket.org:$user_name/$url
 					;;
 			esac
 			;;
