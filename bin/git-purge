@@ -3,6 +3,5 @@
 branch=$(git symbolic-ref --short HEAD)
 if [ "$branch" != master ]; then
   git delete-pub "$branch"
-  git checkout master
-  git pull && git branch -d "$branch" && git pub
+  git fetch origin && git branch -d master && git branch master origin/master && git checkout master && git branch -d "$branch" && git pub
 fi
