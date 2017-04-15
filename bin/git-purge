@@ -1,7 +1,26 @@
 #!/bin/bash
 
-branch=$(git symbolic-ref --short HEAD)
-if [ "$branch" != master ]; then
-  git delete-pub "$branch"
-  git fetch origin && git branch -d master && git branch master origin/master && git checkout master && git branch -d "$branch" && git pub
-fi
+git_purge_main(){
+  local branch
+  local last
+
+  branch=$(git symbolic-ref --short HEAD)
+  if [ "$branch" != master ]; then
+    git fetch origin
+
+    last=$(git show --format="%H")
+    if [ -z "$(git show origin "$last" --format="%H")" ]; then
+      echo "last commit is not merged to origin"
+      exit 1
+    fi
+
+    git delete-pub "$branch" \
+      && git branch -d master \
+      && git branch master origin/master \
+      && git checkout master \
+      && git branch -d "$branch" \
+      && git pub
+  fi
+}
+
+git_purge_main
