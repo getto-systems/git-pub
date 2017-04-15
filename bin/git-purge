@@ -8,8 +8,8 @@ git_purge_main(){
   if [ "$branch" != master ]; then
     git fetch origin
 
-    last=$(git show --format="%H")
-    if [ -z "$(git show origin "$last" --format="%H")" ]; then
+    last="$(git show -q --format="%H")"
+    if [ -n "$(git log origin/master.."$last" --format="%H")" ]; then
       echo "last commit is not merged to origin"
       exit 1
     fi
