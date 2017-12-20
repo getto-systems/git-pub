@@ -11,7 +11,6 @@ git_purge_main(){
 
     last="$(git show -q --format="%H")"
     parent=$(git parent)
-    : ${parent:=master}
     if [ -n "$(git log "origin/$parent".."$last" --format="%H")" ]; then
       echo "last commit is not merged to origin"
       exit 1
