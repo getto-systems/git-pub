@@ -1,3 +1,9 @@
 #!/bin/bash
 
-git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | sed 's/.*\[\([^]^~]*\).*/\1/'
+git_parent_main(){
+  local parent
+  parent=$(git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | sed 's/.*\[\([^]^~]*\).*/\1/')
+  echo "${parent:-master}"
+}
+
+git_parent_main
