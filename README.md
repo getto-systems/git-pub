@@ -91,4 +91,5 @@ git delete-pub #=> git push pub :<CURRENT_BRANCH>
 ## License
 
 git-pub is licensed under the [MIT](LICENSE) license.
-Copyright &copy; since 2017 shun@getto.systems
+
+Copyright &copy; since 2016 shun@getto.systems
