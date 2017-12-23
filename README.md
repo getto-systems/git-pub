@@ -1,34 +1,92 @@
 # git-pub
 
-push, delete, purge remote public branch
+push to remote public branch
 
+```bash
+git commit -m "some changes"
+
+git pub
+
+# pull request ...
+# and merged
+
+git purge
+```
+
+###### Table of Contents
+
+- [Requirements](#requirements)
+- [Usage](#usage)
+
+
+<a id="requirements"></a>
+## Requirements
+
+- Alpine Linux 3.6.0
+- GNU bash, version 4.3.48(1)-release (x86_64-alpine-linux-musl)
+- git version 2.14.2
+
+
+<a id="usage"></a>
 ## Usage
 
-```bash
-git pub
-# git push pub $(git current)
-```
+to install git-pub, clone into your bash-scripts directory, and export PATH
 
 ```bash
-git delete-pub
-# git push pub :$(git current)
+INSTALL_DIR=path/to/scripts/git-pub
+git clone https://github.com/sanzen-sekai/git-pub.git $INSTALL_DIR
+export PATH=$INSTALL_DIR/bin:$PATH
 ```
+
+### git pub
+
+push current-branch to remote that named 'pub'
 
 ```bash
-git purge
-# git push delete-pub
-# git push checkout master
-# git push pull
-# git push branch -d $branch
+git pub #=> git push pub <CURRENT_BRANCH>
 ```
+
+### git purge
+
+cleanup current-branch from remote and local
 
 ```bash
-git reg-pub github:GITHUB-USER bitbucket:BITBUCKET-USER
-# git remote add pub URL
+git purge #=>
+  git push pub :<CURRENT_BRANCH> &&
+  git branch -d <PARENT_BRANCH> &&
+  git branch <PARENT_BRANCH> origin/<PARENT_BRANCH> &&
+  git checkout <PARENT_BRANCH> &&
+  git branch -d <CURRENT_BRANCH> &&
+  git pub
 ```
 
-## Installation
+- `CURRENT_BRANCH` : working branch name
+- `PARENT_BRANCH` : base branch of working branch
+
+1. delete pub's current-branch
+1. renew parent-branch : delete local, and create from origin
+1. checkout parent-branch
+1. delete local current-branch
+1. push pub
+
+### git reg-pub
+
+register remote that named 'pub'
 
 ```bash
-git remote add pub 'URL'
+git reg-pub github:GITHUB_USER bitbucket:BITBUCKET_USER #=>
+  git remote add pub $URL
 ```
+
+### git delete-pub
+
+delete current-branch from remote that named 'pub'
+
+```bash
+git delete-pub #=> git push pub :<CURRENT_BRANCH>
+```
+
+## License
+
+git-pub is licensed under the [MIT](LICENSE) license.
+Copyright &copy; since 2017 shun@getto.systems
