@@ -17,6 +17,7 @@ git purge
 
 - [Requirements](#requirements)
 - [Usage](#usage)
+- [License](#license)
 
 
 <a id="requirements"></a>
@@ -86,6 +87,7 @@ delete current-branch from remote that named 'pub'
 git delete-pub #=> git push pub :<CURRENT_BRANCH>
 ```
 
+<a id="license"></a>
 ## License
 
 git-pub is licensed under the [MIT](LICENSE) license.
