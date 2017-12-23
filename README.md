@@ -34,7 +34,9 @@ to install git-pub, clone into your bash-scripts directory, and export PATH
 
 ```bash
 INSTALL_DIR=path/to/scripts/git-pub
+
 git clone https://github.com/sanzen-sekai/git-pub.git $INSTALL_DIR
+
 export PATH=$INSTALL_DIR/bin:$PATH
 ```
 
