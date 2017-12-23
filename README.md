@@ -23,7 +23,6 @@ git purge
 <a id="requirements"></a>
 ## Requirements
 
-- Alpine Linux 3.6.0
 - GNU bash, version 4.3.48(1)-release (x86_64-alpine-linux-musl)
 - git version 2.14.2
 
