@@ -71,6 +71,28 @@ git purge #=>
 1. delete local current-branch
 1. push pub
 
+### git parent
+
+detect base branch of current-branch
+
+```bash
+git checkout master
+git checkout -b branch-A
+git commit -m "some changes"
+
+git parent # => master
+```
+
+```bash
+git checkout master
+git checkout -b branch-A
+git commit -m "some changes"
+git checkout -b branch-B
+git commit -m "some changes"
+
+git parent # => branch-A
+```
+
 ### git reg-pub
 
 register remote that named 'pub'
