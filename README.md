@@ -1,6 +1,6 @@
 # git-pub
 
-push to remote public branch
+push current-branch to remote
 
 ```bash
 git commit -m "some changes"
