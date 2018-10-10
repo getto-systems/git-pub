@@ -1,66 +1,79 @@
 #!/bin/bash
 
 git_reg_pub_main(){
-	local remote_name
-	local remote
-	local host
-	local host_user
-	local user_name
-	local url
+  local remote_name
+  local remote
+  local host
+  local host_user
+  local user_name
+  local url
 
-	remote=$(git remote -v | grep $remote_name.*fetch)
-	remote=${remote#*	}
-	remote=${remote% *}
-	remote=${remote%.git}
+  remote=$(git remote -v | grep $remote_name.*fetch)
+  remote=${remote#*	}
+  remote=${remote% *}
+  remote=${remote%.git}
 
-	case "$remote" in
-		git://github.com* | https://github.com*)
-			host=github
-			;;
-		https://*bitbucket.org* | git@bitbucket.org:*)
-			host=bitbucket
-			;;
-		*)
-			echo "git-reg-pub: unknown hosting service. noop"
-			exit 1
-			;;
-	esac
+  case "$remote" in
+    git://github.com* | https://github.com*)
+      host=github
+      ;;
+    https://*bitbucket.org* | git@bitbucket.org:*)
+      host=bitbucket
+      ;;
+    git@gitlab.com:*)
+      host=gitlab
+      ;;
+    *)
+      echo "git-reg-pub: unknown hosting service. noop"
+      exit 1
+      ;;
+  esac
 
-	for host_user in "$@"; do
-		if [ "${host_user%:*}" = $host ]; then
-			user_name=${host_user#*:}
-		fi
-	done
+  for host_user in "$@"; do
+    if [ "${host_user%:*}" = $host ]; then
+      user_name=${host_user#*:}
+    fi
+  done
 
-	if [ -z "$user_name" ]; then
-		echo "no user found for host: [$host] in ($@)"
-		exit 1
-	fi
+  if [ -z "$user_name" ]; then
+    echo "no user found for host: [$host] in ($@)"
+    exit 1
+  fi
 
-	url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/")
+  case "$host" in
+    github)
+      url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/")
+      url=${url#git://}
+      url=${url#https://}
+      url=https://$user_name@$url
+      ;;
+    bitbucket)
+      url=$(echo $remote | sed "s/[^\/]\+\(\/[^\/]*\)$/$user_name\1/")
 
-	case "$host" in
-		github)
-			url=${url#git://}
-			url=${url#https://}
-			url=https://$user_name@$url
-			;;
-		bitbucket)
-			case "$url" in
-				https://*)
-					url=${url#https://}
-					url=https://$user_name@$url
-					;;
-				*)
-					url=${url#git@bitbucket.org:}
-					url=${url#*/}
-					url=git@bitbucket.org:$user_name/$url
-					;;
-			esac
-			;;
-	esac
+      case "$url" in
+        https://*)
+          url=${url#https://}
+          url=https://$user_name@$url
+          ;;
+        *)
+          url=${url#git@bitbucket.org:}
+          url=${url#*/}
+          url=git@bitbucket.org:$user_name/$url
+          ;;
+      esac
+      ;;
+    gitlab)
+      case "$url" in
+        *)
+          url=$remote
+          url=${url#git@gitlab.com:}
+          url=git@gitlab.com:$user_name/$url
+          ;;
+      esac
+      ;;
+  esac
 
-	git remote add pub $url
+  git remote add pub $url
 }
 
 git_reg_pub_main "$@"
