@@ -2,6 +2,7 @@
 
 git_sync_pub_main(){
   local branch
+  local current
 
   branch=$1; shift
 
@@ -10,11 +11,19 @@ git_sync_pub_main(){
     exit 1
   fi
 
+  current=$(git symbolic-ref --short HEAD)
+
   git checkout -b $branch && \
     git add -A . && \
     git fetch pub && \
     git merge pub/$branch && \
     git reset
+
+  if [ $? != 0 ]; then
+    git checkout $current && \
+      git branch -d $branch && \
+      git reset
+  fi
 }
 
 git_sync_pub_main "$@"
