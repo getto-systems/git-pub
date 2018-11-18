@@ -16,12 +16,14 @@ git_purge_main(){
       exit 1
     fi
 
-    git delete-pub "$branch" \
-      && git branch -d "$parent" \
-      && git branch "$parent" "origin/$parent" \
-      && git checkout "$parent" \
-      && git branch -d "$branch" \
-      && git pub
+    git delete-pub "$branch" && \
+      git add -A . && \
+      git branch -d "$parent" && \
+      git branch "$parent" "origin/$parent" && \
+      git checkout "$parent" && \
+      git branch -d "$branch" && \
+      git pub && \
+      git reset
   fi
 }
 
