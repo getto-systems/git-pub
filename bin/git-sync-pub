@@ -1,0 +1,20 @@
+#!/bin/bash
+
+git_sync_pub_main(){
+  local branch
+
+  branch=$1; shift
+
+  if [ -z "$branch" ]; then
+    echo "usage git-sync-pub <remote-branch>"
+    exit 1
+  fi
+
+  git checkout -b $branch && \
+    git add -A . && \
+    git fetch pub && \
+    git merge pub/$branch && \
+    git reset
+}
+
+git_sync_pub_main "$@"
