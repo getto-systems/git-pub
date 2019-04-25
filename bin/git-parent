@@ -1,9 +1,17 @@
 #!/bin/bash
 
 git_parent_main(){
+  local current
   local parent
-  parent=$(git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | sed 's/.*\[\([^]^~]*\).*/\1/')
-  echo "${parent:-master}"
+
+  current=$(git rev-parse --abbrev-ref HEAD)
+
+  if [ -n "$(git branch -a | grep "remotes/origin/$current"'$')" ]; then
+    echo $current
+  else
+    parent=$(git show-branch | grep '*' | grep -v "$current" | head -1 | sed 's/.*\[\([^]^~]*\).*/\1/')
+    echo "${parent:-master}"
+  fi
 }
 
 git_parent_main
