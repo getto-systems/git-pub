@@ -1,14 +1,13 @@
 #!/bin/bash
 
 git_reg_pub_main(){
-  local remote_name
   local remote
   local host
   local host_user
   local user_name
   local url
 
-  remote=$(git remote -v | grep $remote_name.*fetch)
+  remote=$(git remote -v | grep origin.*fetch)
   remote=${remote#*	}
   remote=${remote% *}
   remote=${remote%.git}
@@ -73,6 +72,7 @@ git_reg_pub_main(){
       ;;
   esac
 
+  git remote rm pub 2> /dev/null
   git remote add pub $url
 }
 
