@@ -1,3 +1,10 @@
+# CHANGELOG
+
+## Version : 0.3.0
+
+- fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!8
+- fix: purge : See merge request getto-systems-labo/git-pub!7
+
 # Version : 0.2.0
 
 fix: parent
