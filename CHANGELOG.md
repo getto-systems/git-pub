@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Version : 0.4.3
+
+- fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!15
+- version dump: 0.4.2 : See merge request getto-systems-base/labo/git/pub!14
+- fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!13
+- fix: set-window-title : See merge request getto-systems-base/labo/git/pub!12
+
+
 ## Version : 0.4.2
 
 - fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!13
