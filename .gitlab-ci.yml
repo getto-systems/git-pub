@@ -1,7 +1,7 @@
 stages:
   - version_dump
-  - version_dump_notify
   - release
+  - release_notify
 
 version_dump:
   stage: version_dump
@@ -15,46 +15,18 @@ version_dump:
 
   before_script:
     - git config user.email admin@getto.systems
-    - git config user.name  getto
-    - curl https://raw.githubusercontent.com/getto-systems/git-post/master/bin/setup.sh | bash -s -- /opt/getto-systems
-    - export PATH=$PATH:/opt/getto-systems/git-post/bin
+    - git config user.name getto
+    - curl https://raw.githubusercontent.com/getto-systems/git-post/master/scripts/setup.sh | bash -s -- ./vendor/getto-systems
+    - export PATH=$PATH:./vendor/getto-systems/git-post/bin
   script:
     - curl https://raw.githubusercontent.com/getto-systems/version-dump/master/bin/version_dump.sh | bash
     - curl https://raw.githubusercontent.com/getto-systems/version-dump/master/bin/request.sh | bash -s -- ./.release-version-message.sh
-
-version_dump_success:
-  stage: version_dump_notify
-  only:
-    refs:
-      - triggers
-    variables:
-      - $RELEASE
-  when: on_success
-
-  image: buildpack-deps:disco-curl
-
-  script:
-    - curl https://raw.githubusercontent.com/getto-systems/psycher-getto/master/bin/notify-deploy.sh | bash -s -- -l $GETTO_PSYCHER_URL?$GETTO_PSYCHER_TOKEN=true success
-
-version_dump_failure:
-  stage: version_dump_notify
-  only:
-    refs:
-      - triggers
-    variables:
-      - $RELEASE
-  when: on_failure
-
-  image: buildpack-deps:disco-curl
-
-  script:
-    - curl https://raw.githubusercontent.com/getto-systems/psycher-getto/master/bin/notify-deploy.sh | bash -s -- -l $GETTO_PSYCHER_URL?$GETTO_PSYCHER_TOKEN=true failure
 
 release:
   stage: release
   only:
     refs:
-      - master@getto-systems-base/labo/git/pub
+      - master@getto-systems-base/projects/psycher/slack
     changes:
       - .release-version
   except:
@@ -62,7 +34,45 @@ release:
       - triggers
       - schedules
 
-  image: buildpack-deps:disco-scm
-
   script:
     - curl https://raw.githubusercontent.com/getto-systems/version-dump/master/bin/push_tags.sh | bash
+
+release_success:
+  stage: release_notify
+  only:
+    refs:
+      - master@getto-systems-base/projects/psycher/slack
+    changes:
+      - .release-version
+  except:
+    refs:
+      - triggers
+      - schedules
+  when: on_success
+
+  image: buildpack-deps:disco-curl
+
+  before_script:
+    - export channel=$SLACK_CHANNEL
+  script:
+    - curl https://raw.githubusercontent.com/getto-systems/psycher-getto/master/bin/notify-release.sh | bash -s -- -l $GETTO_PSYCHER_URL?$GETTO_PSYCHER_TOKEN=true success
+
+release_failure:
+  stage: release_notify
+  only:
+    refs:
+      - master@getto-systems-base/projects/psycher/slack
+    changes:
+      - .release-version
+  except:
+    refs:
+      - triggers
+      - schedules
+  when: on_failure
+
+  image: buildpack-deps:disco-curl
+
+  before_script:
+    - export channel=$SLACK_CHANNEL
+  script:
+    - curl https://raw.githubusercontent.com/getto-systems/psycher-getto/master/bin/notify-release.sh | bash -s -- -l $GETTO_PSYCHER_URL?$GETTO_PSYCHER_TOKEN=true failure
