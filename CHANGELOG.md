@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.4.4
+
+- fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!17
+
+
 ## Version : 0.4.3
 
 - fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!15
