@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.5.0
+
+- fix: parent detection : See merge request getto-systems-base/labo/git/pub!19
+
+
 ## Version : 0.4.4
 
 - fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!17
