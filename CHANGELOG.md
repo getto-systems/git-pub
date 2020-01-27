@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.6.0
+
+- fix: purge : See merge request getto-systems-base/labo/git/pub!21
+
+
 ## Version : 0.5.0
 
 - fix: parent detection : See merge request getto-systems-base/labo/git/pub!19
