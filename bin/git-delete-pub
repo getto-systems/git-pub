@@ -1,3 +1,6 @@
 #!/bin/bash
 
-git push pub :"$(git symbolic-ref --short HEAD)"
+current=$(git symbolic-ref --short HEAD)
+if [ -n "$(git br -a | grep "pub/$current"'$')" ]; then
+  git push pub :"$current"
+fi

@@ -4,16 +4,24 @@ git_purge_main(){
   local branch
   local last
   local parent
+  local merged_parent
 
   branch=$(git symbolic-ref --short HEAD)
   if [ "$branch" != master ]; then
-    git fetch origin
-    git fetch pub
-
     parent=$(git parent)
-    if [ -n "$(git branch -r --no-merged origin/$parent | grep pub/$branch)" ]; then
-      echo "pub/$branch is not merged to origin/$parent"
-      exit 1
+
+    git fetch --prune origin
+    git fetch --prune pub
+
+    if [ -z "$(git branch -a | grep "origin/$parent"'$')" ]; then
+      # parent branch already merged to master, maybe
+      merged_parent=$parent
+      parent=master
+    else
+      if [ -n "$(git branch -r --no-merged origin/$parent | grep pub/$branch)" ]; then
+        echo "pub/$branch is not merged to origin/$parent"
+        exit 1
+      fi
     fi
 
     git delete-pub "$branch" && \
@@ -22,6 +30,10 @@ git_purge_main(){
     git checkout "$parent" && \
     git branch -D "$branch" && \
     :
+
+    if [ -n "$merged_parent" ]; then
+      git branch -D "$merged_parent"
+    fi
   fi
 }
 
