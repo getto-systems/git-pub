@@ -19,36 +19,36 @@ git_parent_search_min_commit_count(){
   local fork_point
 
   for refname in $(git br -r --list "${parent_remote}/*" --sort="-authordate" --format="%(refname)"); do
-    fork_point=$(git merge-base --fork-point $refname)
+    fork_point=$(git merge-base --fork-point "${refname}")
 
-    if [ -n "$fork_point" ]; then
+    if [ -n "${fork_point}" ]; then
       git_parent_set_min_commit_count
     fi
   done
 }
 git_parent_set_min_commit_count(){
   local commit_count
-  commit_count=$(git log --format="%h" ${fork_point}.. | wc -l)
+  commit_count=$(git log --format="%h" "${fork_point}.." | wc -l)
 
-  if [ -n "$min_commit_count" ]; then
-    if [ $commit_count -ge $min_commit_count ]; then
+  if [ -n "${min_commit_count}" ]; then
+    if [ ${commit_count} -ge ${min_commit_count} ]; then
       return
     fi
   fi
 
-  min_commit_count=$commit_count
-  min_commit_refname=$refname
+  min_commit_count=${commit_count}
+  min_commit_refname=${refname}
 }
 git_parent_echo_branch(){
   local parent_branch
 
-  if [ -z "$min_commit_refname" ]; then
+  if [ -z "${min_commit_refname}" ]; then
     parent_branch=master
   else
     parent_branch=${min_commit_refname#refs/remotes/${parent_remote}/}
   fi
 
-  echo $parent_branch
+  echo ${parent_branch}
 }
 
 git_parent_main "$@"
