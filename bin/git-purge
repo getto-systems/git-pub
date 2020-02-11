@@ -1,40 +1,45 @@
 #!/bin/bash
 
 git_purge_main(){
-  local branch
-  local last
-  local parent
-  local merged_parent
+  local parent_remote
 
-  branch=$(git symbolic-ref --short HEAD)
-  if [ "$branch" != master ]; then
-    parent=$(git parent)
+  git_purge_parse_options "$@"
 
-    git fetch --prune origin
-    git fetch --prune pub
+  local current_branch
+  local parent_branch
 
-    if [ -z "$(git branch -a | grep "origin/$parent"'$')" ]; then
-      # parent branch already merged to master, maybe
-      merged_parent=$parent
-      parent=master
-    else
-      if [ -n "$(git branch -r --no-merged origin/$parent | grep pub/$branch)" ]; then
-        echo "pub/$branch is not merged to origin/$parent"
-        exit 1
-      fi
-    fi
+  git fetch "${parent_remote}" --prune
 
-    git delete-pub "$branch" && \
-    git branch -d "$parent" && \
-    git branch "$parent" "origin/$parent" && \
-    git checkout "$parent" && \
-    git branch -D "$branch" && \
-    :
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+  parent_branch=$(git parent)
 
-    if [ -n "$merged_parent" ]; then
-      git branch -D "$merged_parent"
-    fi
+  git_purge_check_full_merged
+
+  git_purge_exec
+}
+git_purge_parse_options(){
+  parent_remote=origin
+}
+git_purge_check_full_merged(){
+  if [ -n "$(git log "${parent_remote}/${parent_branch}..")" ]; then
+    git_purge_error not_full_merged
   fi
 }
+git_purge_exec(){
+  git checkout "${parent_branch}" &&
+  git merge "${parent_remote}/${parent_branch}" &&
+  git branch -d "${current_branch}"
+}
 
-git_purge_main
+git_purge_error(){
+  git_purge_error_message_${1} >&2
+  exit 1
+}
+
+# error messages
+git_purge_error_message_not_full_merged(){
+  echo "${current_branch} is not merged into ${parent_remote}/${parent_branch}."
+  echo "aborted."
+}
+
+git_purge_main "$@"

@@ -2,37 +2,65 @@
 
 git_parent_main(){
   local parent_remote
+  local default_branch
 
   git_parent_parse_options "$@"
 
-  local min_commit_count
   local min_commit_refname
 
-  git_parent_search_min_commit_count
+  git_parent_search_min_commit_refname
   git_parent_echo_branch
 }
 git_parent_parse_options(){
   parent_remote=origin
+  default_branch=master
 }
-git_parent_search_min_commit_count(){
+git_parent_search_min_commit_refname(){
+  local current_branch
+
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+  local min_commit_count
   local refname
-  local fork_point
 
+  # search parent branch in origin(parent) branches
   for refname in $(git br -r --list "${parent_remote}/*" --sort="-authordate" --format="%(refname)"); do
-    fork_point=$(git merge-base --fork-point "${refname}")
-
-    if [ -n "${fork_point}" ]; then
-      git_parent_set_min_commit_count
+    # assume master as parent if current branch matches origin's branch
+    if [ "${refname}" = "refs/remotes/${parent_remote}/${current_branch}" ]; then
+      min_commit_refname=
+      return
     fi
+
+    git_parent_set_min_commit_refname
   done
 }
-git_parent_set_min_commit_count(){
+git_parent_set_min_commit_refname(){
+  # skip origin/HEAD branch
+  if [ "${refname}" = "refs/remotes/${parent_remote}/HEAD" ]; then
+    return
+  fi
+
+  local fork_point
   local commit_count
+
+  fork_point=$(git merge-base --fork-point "${refname}")
+
+  if [ -z "${fork_point}" ]; then
+    return
+  fi
+
   commit_count=$(git log --format="%h" "${fork_point}.." | wc -l)
 
   if [ -n "${min_commit_count}" ]; then
-    if [ ${commit_count} -ge ${min_commit_count} ]; then
+    if [ ${commit_count} -gt ${min_commit_count} ]; then
       return
+    else
+      if [ ${commit_count} -eq ${min_commit_count} ]; then
+        # overwrite min refname if refname is not master(default) branch
+        if [ "${refname}" = "refs/remotes/${parent_remote}/${default_branch}" ]; then
+          return
+        fi
+      fi
     fi
   fi
 
@@ -43,7 +71,7 @@ git_parent_echo_branch(){
   local parent_branch
 
   if [ -z "${min_commit_refname}" ]; then
-    parent_branch=master
+    parent_branch=${default_branch}
   else
     parent_branch=${min_commit_refname#refs/remotes/${parent_remote}/}
   fi
