@@ -8,10 +8,12 @@ git_purge_main(){
   local current_branch
   local parent_branch
 
-  git fetch "${parent_remote}" --prune
-
   current_branch=$(git rev-parse --abbrev-ref HEAD)
   parent_branch=$(git parent)
+
+  if [ "${current_branch}" == "${parent_branch}" ]; then
+    return
+  fi
 
   git_purge_check_full_merged
 
@@ -28,7 +30,8 @@ git_purge_check_full_merged(){
 git_purge_exec(){
   git checkout "${parent_branch}" &&
   git merge "${parent_remote}/${parent_branch}" &&
-  git branch -d "${current_branch}"
+  git branch -d "${current_branch}" &&
+  :
 }
 
 git_purge_error(){
