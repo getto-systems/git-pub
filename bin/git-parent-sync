@@ -1,0 +1,15 @@
+#!/bin/bash
+
+git_parent_sync_main(){
+  local parent_remote
+
+  git_parent_sync_parse_options "$@"
+
+  git fetch "${parent_remote}" --prune
+  git rebase "${parent_remote}/$(git parent)"
+}
+git_parent_sync_parse_options(){
+  parent_remote=origin
+}
+
+git_parent_sync_main "$@"
