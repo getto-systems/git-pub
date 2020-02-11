@@ -15,19 +15,17 @@ git purge
 
 ###### Table of Contents
 
-- [Requirements](#requirements)
-- [Usage](#usage)
-- [License](#license)
+- [Requirements](#Requirements)
+- [Usage](#Usage)
+- [License](#License)
 
 
-<a id="requirements"></a>
 ## Requirements
 
 - GNU bash, version 4.3.48(1)-release (x86_64-alpine-linux-musl)
 - git version 2.14.2
 
 
-<a id="usage"></a>
 ## Usage
 
 to install git-pub, clone into your bash-scripts directory, and export PATH
@@ -40,6 +38,7 @@ git clone https://github.com/getto-systems/git-pub.git $INSTALL_DIR
 export PATH=$INSTALL_DIR/bin:$PATH
 ```
 
+
 ### git pub
 
 push current-branch to remote that named 'pub'
@@ -47,6 +46,7 @@ push current-branch to remote that named 'pub'
 ```bash
 git pub #=> git push pub <CURRENT_BRANCH>
 ```
+
 
 ### git purge
 
@@ -71,6 +71,7 @@ git purge #=>
 1. delete local current-branch
 1. push pub
 
+
 ### git parent
 
 detect base branch of current-branch
@@ -83,15 +84,12 @@ git commit -m "some changes"
 git parent # => master
 ```
 
-```bash
-git checkout master
-git checkout -b branch-A
-git commit -m "some changes"
-git checkout -b branch-B
-git commit -m "some changes"
 
-git parent # => branch-A
-```
+### git parent-sync
+
+fetch origin, then rebase `origin/$parent`
+
+
 
 ### git reg-pub
 
@@ -102,6 +100,7 @@ git reg-pub github:GITHUB_USER bitbucket:BITBUCKET_USER #=>
   git remote add pub $URL
 ```
 
+
 ### git delete-pub
 
 delete current-branch from remote that named 'pub'
@@ -110,7 +109,7 @@ delete current-branch from remote that named 'pub'
 git delete-pub #=> git push pub :<CURRENT_BRANCH>
 ```
 
-<a id="license"></a>
+
 ## License
 
 git-pub is licensed under the [MIT](LICENSE) license.
