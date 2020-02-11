@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Version : 0.10.0
+
+- add: pub-wipe : See merge request getto-systems-base/labo/git/pub!33
+- fix: purge : See merge request getto-systems-base/labo/git/pub!32
+- add: parent-sync : See merge request getto-systems-base/labo/git/pub!31
+- fix: variable style : See merge request getto-systems-base/labo/git/pub!30
+- fix: parent detection : See merge request getto-systems-base/labo/git/pub!29
+
+
 ## Version : 0.9.0
 
 - fix: parent detection : See merge request getto-systems-base/labo/git/pub!27
