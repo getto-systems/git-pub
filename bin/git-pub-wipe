@@ -1,0 +1,22 @@
+#!/bin/bash
+
+git_pub_wipe_main(){
+  local branch
+
+  for branch in $(git branch --format="%(refname):%(upstream)"); do
+    git_pub_wipe_delete_widow_branch
+  done
+}
+git_pub_wipe_delete_widow_branch(){
+  local refname
+  local upstream
+
+  refname=${branch%:*}
+  upstream=${branch#*:}
+
+  if [ -z "$(git branch -r --list "${upstream#refs/remotes/}")" ]; then
+    git br -d "${refname#refs/heads/}"
+  fi
+}
+
+git_pub_wipe_main "$@"
