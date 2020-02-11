@@ -1,13 +1,13 @@
 #!/bin/bash
 
-git_pub_wipe_main(){
+git_wipe_widow_branch_main(){
   local branch
 
   for branch in $(git branch --format="%(refname):%(upstream)"); do
-    git_pub_wipe_delete_widow_branch
+    git_wipe_widow_branch_delete
   done
 }
-git_pub_wipe_delete_widow_branch(){
+git_wipe_widow_branch_delete(){
   local refname
   local upstream
 
@@ -19,4 +19,4 @@ git_pub_wipe_delete_widow_branch(){
   fi
 }
 
-git_pub_wipe_main "$@"
+git_wipe_widow_branch_main "$@"
