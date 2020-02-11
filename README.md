@@ -50,26 +50,9 @@ git pub #=> git push pub <CURRENT_BRANCH>
 
 ### git purge
 
-cleanup current-branch from remote and local
-
-```bash
-git purge #=>
-  git push pub :<CURRENT_BRANCH> &&
-  git branch -d <PARENT_BRANCH> &&
-  git branch <PARENT_BRANCH> origin/<PARENT_BRANCH> &&
-  git checkout <PARENT_BRANCH> &&
-  git branch -d <CURRENT_BRANCH> &&
-  git pub
-```
-
-- `CURRENT_BRANCH` : working branch name
-- `PARENT_BRANCH` : base branch of working branch
-
-1. delete pub's current-branch
-1. renew parent-branch : delete local, and create from origin
-1. checkout parent-branch
-1. delete local current-branch
-1. push pub
+1. check current branch is fully merged into parent branch
+1. checkout parent branch
+1. delete current branch
 
 
 ### git parent
@@ -90,6 +73,16 @@ git parent # => master
 fetch origin, then rebase `origin/$parent`
 
 
+### git wipe-widow-branch
+
+delete branches that upstream is already deleted
+
+```bash
+git fetch --prune
+git wipe-widow-branch
+```
+
+
 
 ### git reg-pub
 
@@ -98,15 +91,6 @@ register remote that named 'pub'
 ```bash
 git reg-pub github:GITHUB_USER bitbucket:BITBUCKET_USER #=>
   git remote add pub $URL
-```
-
-
-### git delete-pub
-
-delete current-branch from remote that named 'pub'
-
-```bash
-git delete-pub #=> git push pub :<CURRENT_BRANCH>
 ```
 
 
