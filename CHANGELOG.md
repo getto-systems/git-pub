@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version : 0.11.0
+
+- fix: readme : See merge request getto-systems-base/labo/git/pub!36
+- fix: parent sync merge : See merge request getto-systems-base/labo/git/pub!35
+
+
 ## Version : 0.10.0
 
 - add: pub-wipe : See merge request getto-systems-base/labo/git/pub!33
