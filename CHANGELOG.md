@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.12.0
+
+- fix: parent detection : See merge request getto-systems-base/labo/git/pub!38
+
+
 ## Version : 0.11.0
 
 - fix: readme : See merge request getto-systems-base/labo/git/pub!36
