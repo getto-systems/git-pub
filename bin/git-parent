@@ -46,10 +46,18 @@ git_parent_set_min_commit_refname(){
   fork_point=$(git merge-base --fork-point "${refname}")
 
   if [ -z "${fork_point}" ]; then
-    return
+    if [ -z "$(git log "${refname}..")" ]; then
+      # merged feature branch
+      commit_count=0
+    else
+      # another feature branch
+      return
+    fi
   fi
 
-  commit_count=$(git log --format="%h" "${fork_point}.." | wc -l)
+  if [ -z "${commit_count}" ]; then
+    commit_count=$(git log --format="%h" "${fork_point}.." | wc -l)
+  fi
 
   if [ -n "${min_commit_count}" ]; then
     if [ ${commit_count} -gt ${min_commit_count} ]; then
