@@ -1,22 +1,13 @@
 #!/bin/bash
 
 git_wipe_widow_branch_main(){
-  local branch
-
-  for branch in $(git branch --format="%(refname):%(upstream)"); do
-    git_wipe_widow_branch_delete
-  done
-}
-git_wipe_widow_branch_delete(){
   local refname
-  local upstream
 
-  refname=${branch%:*}
-  upstream=${branch#*:}
-
-  if [ -z "$(git branch -r --list "${upstream#refs/remotes/}")" ]; then
-    git br -d "${refname#refs/heads/}"
-  fi
+  for refname in $(git branch --format="%(refname)"); do
+    if [ -z "$(git branch -r --list "pub/${refname#refs/heads/}")" ]; then
+      git br -d "${refname#refs/heads/}"
+    fi
+  done
 }
 
 git_wipe_widow_branch_main "$@"
