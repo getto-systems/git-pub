@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.13.0
+
+- fix: wipe widow branch : See merge request getto-systems-base/labo/git/pub!40
+
+
 ## Version : 0.12.0
 
 - fix: parent detection : See merge request getto-systems-base/labo/git/pub!38
