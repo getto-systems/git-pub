@@ -34,7 +34,7 @@ git_parent_search_min_commit_refname(){
     git_parent_set_min_commit_refname
   done
 
-  refname=refs/remotes/$parent_remote/master
+  refname=refs/remotes/${parent_remote}/${default_branch}
   git_parent_set_min_commit_refname
 }
 git_parent_set_min_commit_refname(){
