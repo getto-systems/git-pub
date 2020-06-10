@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version : 0.14.0
+
+- fix: git parent : See merge request getto-systems-base/labo/git/pub!45
+- fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!43
+- fix: gitlab-ci : See merge request getto-systems-base/labo/git/pub!42
+
+
 ## Version : 0.13.0
 
 - fix: wipe widow branch : See merge request getto-systems-base/labo/git/pub!40
