@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.15.0
+
+- fix: default branch name : See merge request getto-systems-base/labo/git/pub!47
+
+
 ## Version : 0.14.0
 
 - fix: git parent : See merge request getto-systems-base/labo/git/pub!45
