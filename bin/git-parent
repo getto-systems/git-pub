@@ -1,86 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 git_parent_main(){
   local parent_remote
-  local default_branch
 
   git_parent_parse_options "$@"
 
-  local min_commit_refname
+  local branch
+  branch=$(git_parent_current_branch)
 
-  git_parent_search_min_commit_refname
-  git_parent_echo_branch
+  case "${branch}" in
+    */*)
+      echo ${branch%%/*}
+      ;;
+    *)
+      git ls-remote --symref $parent_remote HEAD | grep ref: | awk '{ print $2 }' | sed 's|^refs/heads/||'
+      ;;
+  esac
 }
 git_parent_parse_options(){
-  parent_remote=origin
-  default_branch=master
+  parent_remote=$1
+
+  if [ -z "$parent_remote" ]; then
+    parent_remote=origin
+  fi
 }
-git_parent_search_min_commit_refname(){
-  local current_branch
 
-  current_branch=$(git rev-parse --abbrev-ref HEAD)
-
-  local min_commit_count
-  local refname
-
-  # search parent branch in origin(parent) branches
-  for refname in $(git br -r --list "${parent_remote}/*" --sort="-authordate" --format="%(refname)"); do
-    # assume master as parent if current branch matches origin's branch
-    if [ "${refname}" = "refs/remotes/${parent_remote}/${current_branch}" ]; then
-      min_commit_refname=
-      return
-    fi
-
-    git_parent_set_min_commit_refname
-  done
-
-  refname=refs/remotes/${parent_remote}/${default_branch}
-  git_parent_set_min_commit_refname
-}
-git_parent_set_min_commit_refname(){
-  # skip origin/HEAD branch
-  if [ "${refname}" = "refs/remotes/${parent_remote}/HEAD" ]; then
-    return
-  fi
-
-  local fork_point
-  local commit_count
-
-  fork_point=$(git merge-base --fork-point "${refname}")
-
-  if [ -z "${fork_point}" ]; then
-    if [ -z "$(git log "${refname}..")" ]; then
-      # merged feature branch
-      commit_count=0
-    else
-      # another feature branch
-      return
-    fi
-  fi
-
-  if [ -z "${commit_count}" ]; then
-    commit_count=$(git log --format="%h" "${fork_point}.." | wc -l)
-  fi
-
-  if [ -n "${min_commit_count}" ]; then
-    if [ ${commit_count} -gt ${min_commit_count} ]; then
-      return
-    fi
-  fi
-
-  min_commit_count=${commit_count}
-  min_commit_refname=${refname}
-}
-git_parent_echo_branch(){
-  local parent_branch
-
-  if [ -z "${min_commit_refname}" ]; then
-    parent_branch=${default_branch}
-  else
-    parent_branch=${min_commit_refname#refs/remotes/${parent_remote}/}
-  fi
-
-  echo ${parent_branch}
+git_parent_current_branch(){
+  git rev-parse --abbrev-ref HEAD
 }
 
 git_parent_main "$@"

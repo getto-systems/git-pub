@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 git_parent_sync_main(){
   local parent_remote
@@ -6,10 +6,14 @@ git_parent_sync_main(){
   git_parent_sync_parse_options "$@"
 
   git fetch "${parent_remote}" --prune
-  git merge --ff-only --no-commit "${parent_remote}/$(git parent)"
+  git merge --no-commit "$parent_remote/$(git parent)"
 }
 git_parent_sync_parse_options(){
-  parent_remote=origin
+  parent_remote=$1
+
+  if [ -z "$parent_remote" ]; then
+    parent_remote=origin
+  fi
 }
 
 git_parent_sync_main "$@"
