@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+git_check_full_merged_into_parent_branch_main(){
+  local parent_remote
+
+  git_check_full_merged_into_parent_branch_parse_options "$@"
+
+  git fetch --prune ${parent_remote}
+  if [ -n "$(git log --oneline ${parent_remote}/$(git parent)..)" ]; then
+    exit 1
+  fi
+}
+git_check_full_merged_into_parent_branch_parse_options(){
+  parent_remote=$1
+
+  if [ -z "$parent_remote" ]; then
+    parent_remote=origin
+  fi
+}
+
+git_check_full_merged_into_parent_branch_main "$@"

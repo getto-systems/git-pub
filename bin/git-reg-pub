@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 git_reg_pub_main(){
   local remote

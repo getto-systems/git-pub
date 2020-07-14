@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+git_switch_parent_default_branch_main(){
+  local parent_remote
+
+  git_switch_parent_default_branch_parse_options "$@"
+
+  git switch --detach refs/remotes/${parent_remote}/$(git parent)
+}
+git_switch_parent_default_branch_parse_options(){
+  parent_remote=$1
+
+  if [ -z "$parent_remote" ]; then
+    parent_remote=origin
+  fi
+}
+
+git_switch_parent_default_branch_main "$@"

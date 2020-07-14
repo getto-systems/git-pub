@@ -1,3 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
-git push pub "$(git symbolic-ref --short HEAD)" "$@"
+git_pub_main(){
+  local current_branch
+
+  current_branch=$(git_pub_current_branch)
+  if [ "$current_branch" == HEAD ]; then
+    git_pub_error detached
+  fi
+
+  git push pub "$current_branch" "$@"
+}
+
+git_pub_current_branch(){
+  git rev-parse --abbrev-ref HEAD
+}
+
+git_pub_error(){
+  git_pub_error_message_${1} >&2
+  exit 1
+}
+
+# error messages
+git_pub_error_message_detached(){
+  echo "${current_branch} is detached branch."
+  echo "aborted."
+}
+
+git_pub_main "$@"

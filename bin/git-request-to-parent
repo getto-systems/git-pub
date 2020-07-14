@@ -1,0 +1,78 @@
+#!/usr/bin/env sh
+
+git_request_to_parent_main(){
+  local message
+
+  git_request_to_parent_parse_options "$@"
+
+  local branch
+  branch=$(git_request_to_parent_current_branch)
+
+  if [ "${branch}" == HEAD ]; then
+    git_request_to_parent_switch_branch
+    git_request_to_parent_push
+    git post "${message}" "$(git parent)"
+  else
+    git_request_to_parent_check_pub
+    git_request_to_parent_push
+  fi
+}
+git_request_to_parent_parse_options(){
+  message=$1
+
+  if [ -z "$message" ]; then
+    git_request_to_parent_error empty_message
+  fi
+}
+
+git_request_to_parent_current_branch(){
+  git rev-parse --abbrev-ref HEAD
+}
+
+git_request_to_parent_switch_branch(){
+  branch=$(echo "${message}" | head -1 | sed -e "s/[^[:alnum:]]\+/-/g")
+  branch=${branch%-}
+
+  git branch "${branch}" && git switch "${branch}"
+  if [ $? != 0 ]; then
+    git_request_to_parent_error create_branch_failed
+  fi
+}
+
+git_request_to_parent_push(){
+  git commit -m "${message}" --allow-empty && git push pub "$branch"
+  if [ $? != 0 ]; then
+    git_request_to_parent_error push_commits_failed
+  fi
+}
+
+git_request_to_parent_check_pub(){
+  git fetch pub --prune
+  if [ -z "$(git branch --list -r --format="%(refname)" | grep "refs/remotes/pub/${branch}")" ]; then
+    git_request_to_parent_error already_merged
+  fi
+}
+
+git_request_to_parent_error(){
+  git_request_to_parent_error_message_${1} >&2
+  exit 1
+}
+
+# error messages
+git_request_to_parent_error_message_empty_message(){
+  echo "usage: git request-to-parent <commit message>"
+}
+git_request_to_parent_error_message_already_merged(){
+  echo "${branch} is already merged."
+  echo "aborted."
+}
+git_request_to_parent_error_message_create_branch_failed(){
+  echo "failed to create branch: [${branch}]"
+  echo "aborted."
+}
+git_request_to_parent_error_message_push_pub_failed(){
+  echo "failed to push commits"
+  echo "aborted."
+}
+
+git_request_to_parent_main "$@"
