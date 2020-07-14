@@ -4,7 +4,7 @@ git_wipe_deleted_branch_main(){
   local refname
 
   git fetch pub --prune
-  for refname in $(git branch --format="%(refname)" | grep ref/heads/); do
+  for refname in $(git branch --format="%(refname)" | grep refs/heads/); do
     if [ -z "$(git branch -r --list "pub/${refname#refs/heads/}")" ]; then
       git br -d "${refname#refs/heads/}"
     fi
