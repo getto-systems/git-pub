@@ -6,7 +6,7 @@ git_parent_sync_main(){
   git_parent_sync_parse_options "$@"
 
   git fetch "${parent_remote}" --prune
-  git merge --no-commit "$parent_remote/$(git parent)"
+  git merge --ff-only --no-commit "$parent_remote/$(git parent)"
 }
 git_parent_sync_parse_options(){
   parent_remote=$1
