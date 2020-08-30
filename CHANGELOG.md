@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Version : 0.17.0
+
+- fix: error message func name : See merge request getto-systems-base/labo/git/pub!54
+- version bumped: 0.16.0 : See merge request getto-systems-base/labo/git/pub!53
+- fix: gitlab ci : See merge request getto-systems-base/labo/git/pub!52
+- fix: typo : See merge request getto-systems-base/labo/git/pub!51
+- fix: wipe deleted branch : See merge request getto-systems-base/labo/git/pub!50
+- fix: pub : See merge request getto-systems-base/labo/git/pub!49
+
+
 ## Version : 0.16.0
 
 - fix: gitlab ci : See merge request getto-systems-base/labo/git/pub!52
