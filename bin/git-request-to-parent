@@ -70,7 +70,7 @@ git_request_to_parent_error_message_create_branch_failed(){
   echo "failed to create branch: [${branch}]"
   echo "aborted."
 }
-git_request_to_parent_error_message_push_pub_failed(){
+git_request_to_parent_error_message_push_commits_failed(){
   echo "failed to push commits"
   echo "aborted."
 }
