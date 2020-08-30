@@ -31,7 +31,7 @@ release:
   stage: release
   only:
     refs:
-      - master@getto-systems-base/labo/git/pub
+      - release@getto-systems-base/labo/git/pub
     changes:
       - .release-version
   except:
@@ -48,7 +48,7 @@ release_success:
   stage: release_notify
   only:
     refs:
-      - master@getto-systems-base/labo/git/pub
+      - release@getto-systems-base/labo/git/pub
     changes:
       - .release-version
   except:
@@ -70,7 +70,7 @@ release_failure:
   stage: release_notify
   only:
     refs:
-      - master@getto-systems-base/labo/git/pub
+      - release@getto-systems-base/labo/git/pub
     changes:
       - .release-version
   except:
