@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.20.0
+
+- fix: check parent branch : See merge request getto-systems-base/labo/git/pub!60
+
+
 ## Version : 0.19.0
 
 - add: start-fix : See merge request getto-systems-base/labo/git/pub!58
