@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+
+git_start_fix_main(){
+  local branch
+  local ref
+
+  git_start_fix_parse_options "$@"
+
+  local parent
+  git_start_fix_detect_parent_branch
+
+  git switch --detach $ref &&
+  git switch -c "${parent}/${branch}" &&
+  git pub
+}
+git_start_fix_parse_options(){
+  branch=$1
+  ref=$2
+
+  if [ -z "$ref" ]; then
+    echo "usage: git start-fix <remote-ref> <branch-name>"
+    exit 1
+  fi
+  if [ -z "$branch" ]; then
+    echo "usage: git start-fix <remote-ref> <branch-name>"
+    exit 1
+  fi
+}
+
+git_start_fix_detect_parent_branch(){
+  parent=${ref#refs/*/*/}
+}
+
+git_start_fix_main "$@"
