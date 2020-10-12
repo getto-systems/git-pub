@@ -5,7 +5,12 @@ git_switch_parent_default_branch_main(){
 
   git_switch_parent_default_branch_parse_options "$@"
 
-  git switch --detach refs/remotes/${parent_remote}/$(git parent)
+  local ref=refs/remotes/${parent_remote}/$(git parent)
+  if [ "$(git branch -a --format="%(refname)" | grep $ref)" ]; then
+    git switch --detach $ref
+  else
+    git switch --detach refs/remotes/${parent_remote}/HEAD
+  fi
 }
 git_switch_parent_default_branch_parse_options(){
   parent_remote=$1
