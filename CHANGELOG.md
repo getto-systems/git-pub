@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version : 0.19.0
+
+- add: start-fix : See merge request getto-systems-base/labo/git/pub!58
+
+
 ## Version : 0.18.0
 
 - fix: gitlab ci : See merge request getto-systems-base/labo/git/pub!56
