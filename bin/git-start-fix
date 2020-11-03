@@ -10,7 +10,7 @@ git_start_fix_main(){
   git_start_fix_detect_parent_branch
 
   git switch --detach $ref &&
-  git switch -c "${parent}/${branch}" &&
+  git switch -c "${parent}${branch}" &&
   git pub
 }
 git_start_fix_parse_options(){
@@ -28,7 +28,15 @@ git_start_fix_parse_options(){
 }
 
 git_start_fix_detect_parent_branch(){
-  parent=${ref#refs/*/*/}
+  case "${ref}" in
+    refs/remotes/origin/*)
+      parent=${ref#refs/*/*/}/
+      ;;
+    *)
+      # merge to release branch when parent is not origin
+      parent=
+      ;;
+  esac
 }
 
 git_start_fix_main "$@"
